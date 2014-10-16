@@ -39,7 +39,7 @@ var processData = function(err, data) {
 			sumVotes = function(memo, votes) { return +memo + +votes },
 			totalVotes = _(_(results).pluck('CanVotes')).reduce(sumVotes);
 		_.each(groups, function(group){ 
-			group['vote_total'] = _.reduce(_.pluck(group, 'CanVotes'), sumVotes)
+			group['vote_total'] = _(_(group).pluck('CanVotes')).reduce(sumVotes)
 		});
 		console.log(totalVotes)
 		console.log('Crist', groups['Crist'].vote_total, groups['Crist'].vote_total / totalVotes);
