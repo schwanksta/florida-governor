@@ -25,8 +25,14 @@ var fetchFile = function(url, callback) {
 var processData = function(err, data) {
 	csv.parse(data, { columns: true, delimiter: '\t', quote: "~", escape: "~"}, function(err, results) {
 		var govData = _(results).filter(function(i) { return i['RaceName'] === "Governor and Lieutenant Governor" }),
-			groups = _(govData).groupBy('CanNameLast');
-			console.log(groups);
+			groups = _(govData).groupBy('CanNameLast'),
+			sumVotes = function(memo, votes) { return memo + votes },
+			cristVotes = _.reduce(_.map(parseInt, _.pluck(groups['Crist'], 'CanVotes')),  sumVotes),
+			scottVotes = _.reduce(_.map(parseInt, _.pluck(groups['Scott'], 'CanVotes')), sumVotes );
+
+			console.log('Crist', cristVotes);
+			console.log('Scott', scottVotes)
+
 	});
 }
 
