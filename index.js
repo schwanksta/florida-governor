@@ -26,12 +26,13 @@ var processData = function(err, data) {
 	csv.parse(data, { columns: true, delimiter: '\t', quote: "~", escape: "~"}, function(err, results) {
 		var govData = _(results).filter(function(i) { return i['RaceName'] === "Governor and Lieutenant Governor" }),
 			groups = _(govData).groupBy('CanNameLast'),
-			sumVotes = function(memo, votes) { return memo + votes },
-			cristVotes = _.reduce(_.map(parseInt, _.pluck(groups['Crist'], 'CanVotes')),  sumVotes),
-			scottVotes = _.reduce(_.map(parseInt, _.pluck(groups['Scott'], 'CanVotes')), sumVotes );
+			sumVotes = function(memo, votes) { return +memo + +votes };
+			_.each(groups, function(group){ 
+				group['vote_total'] = _.reduce(_.pluck(group, 'CanVotes'), sumVotes)
+			});
 
-			console.log('Crist', cristVotes);
-			console.log('Scott', scottVotes)
+			console.log('Crist', groups['Crist'].vote_total);
+			console.log('Scott', groups['Scott'].vote_total)
 
 	});
 }
