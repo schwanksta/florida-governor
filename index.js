@@ -4,11 +4,7 @@ var AWS = require('aws-sdk'),
     _ = require('underscore');
 
 
-var url = "http://fldoselectionfiles.elections.myflorida.com/enightfilespublic/20141104_ElecResultsFL.xls",
-    creds = {
-        aws_id: process.env.AWS_ID,
-        aws_secret: process.env.AWS_SECRET
-    };
+var url = "http://fldoselectionfiles.elections.myflorida.com/enightfilespublic/20141104_ElecResultsFL.xls";
 
 var fetchFile = function(url, callback) {
 	http.get(url, function(response) {
@@ -26,7 +22,7 @@ var fetchFile = function(url, callback) {
 var uploadToS3 = function(data, callback){
 	var s3bucket = new AWS.S3({params: {Bucket: 'swamprace.schwanksta.com'}}),
 		s3Data = {Key: 'results-latest.json', Body: JSON.stringify(data), ACL: 'public-read'};
-		
+
 	s3bucket.putObject(s3Data, function(err, data) {
 	    if (err) {
 	      console.log("Error uploading data: ", err);
