@@ -26,13 +26,14 @@ var processData = function(err, data) {
 	csv.parse(data, { columns: true, delimiter: '\t', quote: "~", escape: "~"}, function(err, results) {
 		var govData = _(results).filter(function(i) { return i['RaceName'] === "Governor and Lieutenant Governor" }),
 			groups = _(govData).groupBy('CanNameLast'),
-			sumVotes = function(memo, votes) { return +memo + +votes };
-			_.each(groups, function(group){ 
-				group['vote_total'] = _.reduce(_.pluck(group, 'CanVotes'), sumVotes)
-			});
-
-			console.log('Crist', groups['Crist'].vote_total);
-			console.log('Scott', groups['Scott'].vote_total)
+			sumVotes = function(memo, votes) { return +memo + +votes },
+			totalVotes = _(_(results).pluck('CanVotes')).reduce(sumVotes);
+		_.each(groups, function(group){ 
+			group['vote_total'] = _.reduce(_.pluck(group, 'CanVotes'), sumVotes)
+		});
+		console.log(totalVotes)
+		console.log('Crist', groups['Crist'].vote_total, groups['Crist'].vote_total / totalVotes);
+		console.log('Scott', groups['Scott'].vote_total, groups['Scott'].vote_total / totalVotes);
 
 	});
 }
