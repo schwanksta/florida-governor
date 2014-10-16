@@ -16,9 +16,9 @@
     "url": "https://github.com/Schwanksta/florida-governor/issues"
   },
   "dependencies": {
-    "s3": "~4.3.1",
     "csv": "~0.4.0",
     "http": "0.0.0",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "aws-sdk": "~2.0.19"
   }
 }

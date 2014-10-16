@@ -1,4 +1,4 @@
-var s3 = require('s3'),
+var AWS = require('aws-sdk'),
     http = require('http'),
     csv = require('csv'),
     _ = require('underscore');
@@ -22,6 +22,20 @@ var fetchFile = function(url, callback) {
 	}).on("error", callback);
 }
 
+
+var uploadToS3 = function(data, callback){
+	var s3bucket = new AWS.S3({params: {Bucket: 'swamprace.schwanksta.com'}}),
+		s3Data = {Key: 'results-latest.json', Body: JSON.stringify(data), ACL: 'public-read'};
+		
+	s3bucket.putObject(s3Data, function(err, data) {
+	    if (err) {
+	      console.log("Error uploading data: ", err);
+	    } else {
+	      console.log("Successfully uploaded data to swamprace.schwanksta.com/results-latest.json");
+	    }
+  });
+}
+
 var processData = function(err, data) {
 	csv.parse(data, { columns: true, delimiter: '\t', quote: "~", escape: "~"}, function(err, results) {
 		var govData = _(results).filter(function(i) { return i['RaceName'] === "Governor and Lieutenant Governor" }),
@@ -34,7 +48,17 @@ var processData = function(err, data) {
 		console.log(totalVotes)
 		console.log('Crist', groups['Crist'].vote_total, groups['Crist'].vote_total / totalVotes);
 		console.log('Scott', groups['Scott'].vote_total, groups['Scott'].vote_total / totalVotes);
-
+		uploadToS3({
+			totalVotes: totalVotes,
+			scott: {
+				votes: groups['Scott'].vote_total,
+				pct: groups['Scott'].vote_total / totalVotes
+			},
+			crist: {
+				votes: groups['Crist'].vote_total,
+				pct: groups['Crist'].vote_total / totalVotes
+			},
+		}, null);
 	});
 }
 
