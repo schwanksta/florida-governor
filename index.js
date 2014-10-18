@@ -38,9 +38,11 @@ var processData = function(err, data) {
 			groups = _(govData).groupBy('CanNameLast'),
 			sumVotes = function(memo, votes) { return +memo + +votes },
 			totalVotes = _(_(results).pluck('CanVotes')).reduce(sumVotes);
+
 		_.each(groups, function(group){ 
 			group['vote_total'] = _(_(group).pluck('CanVotes')).reduce(sumVotes)
 		});
+
 		console.log(totalVotes)
 		console.log('Crist', groups['Crist'].vote_total, groups['Crist'].vote_total / totalVotes);
 		console.log('Scott', groups['Scott'].vote_total, groups['Scott'].vote_total / totalVotes);
@@ -53,7 +55,7 @@ var processData = function(err, data) {
 			crist: {
 				votes: groups['Crist'].vote_total,
 				pct: groups['Crist'].vote_total / totalVotes
-			},
+			}
 		}, null);
 	});
 }

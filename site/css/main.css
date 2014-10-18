@@ -1,0 +1,10 @@
+.fanblades {
+	width: 300px;
+	height: 284px;
+	transition:        transform 60s;
+}
+
+.fanblades:hover {
+	border-radius: 10px;
+	transform:        rotate(36000deg);
+}
