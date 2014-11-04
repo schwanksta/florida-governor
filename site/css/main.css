@@ -1,10 +1,21 @@
 .fanblades {
 	width: 300px;
 	height: 284px;
-	transition:        transform 60s;
+	transition: transform 60s;
 }
 
 .fanblades:hover {
 	border-radius: 10px;
-	transform:        rotate(36000deg);
+	transform: rotate(36000deg);
 }
+
+.head {
+	width:54px;
+	height:72px;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	margin:2px 0px;
+	float:left;
+}
+.crist-head { background-image: url('/img/cristhead.png'); }
+.scott-head { background-image: url('/img/scotthead.png'); }
